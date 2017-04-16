@@ -7,3 +7,9 @@ set(SRC_MISC
 add_library(lilypad SHARED
     ${SRC_MISC}
 )
+
+target_link_libraries(lilypad
+    ${SCALAPACK_LIBRARIES}
+    ${MPI_CXX_LIBRARIES}
+    ${LAPACK_LIBRARIES}
+)

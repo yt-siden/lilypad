@@ -54,4 +54,5 @@ configure_file("${CMAKE_SOURCE_DIR}/src/misc/info.cpp.in"
     "${CMAKE_BINARY_DIR}/src/misc/info.cpp" @ONLY)
 
 add_subdirectory(src)
+link_libraries(lilypad)
 add_subdirectory(bin)
