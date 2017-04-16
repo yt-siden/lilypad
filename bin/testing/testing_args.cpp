@@ -11,9 +11,5 @@ int main(int argc, char* argv[])
 
     lilypad::Args arg = lilypad::parse_arguments(argc, argv);
     if (global.is_root())
-    {
-        std::cout << "nprow: " << arg.nprow << std::endl;
-        std::cout << "npcol: " << arg.npcol << std::endl;
-        std::cout << "N: "     << arg.N     << std::endl;
-    }
+        lilypad::show_arguments(arg);
 }

@@ -16,6 +16,7 @@ namespace lilypad {
     // functions
     void show_info();
     Args parse_arguments(int& argc, char**& argv);
+    void show_arguments(const Args& arg);
 }
 
 // template functions
