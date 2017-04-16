@@ -25,6 +25,11 @@ lilypad::Args lilypad::parse_arguments(int& argc, char**& argv)
             arg.N = convert_from_string<int>(argv[i+1]);
             ++i;
         }
+        else if (std::string(argv[i]) == std::string("--L") && i+1 < argc)
+        {
+            arg.L = convert_from_string<int>(argv[i+1]);
+            ++i;
+        }
         else
         {
             std::cerr << "Argument '" << argv[i] << "' is invalid." << std::endl;

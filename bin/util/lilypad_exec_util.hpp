@@ -10,6 +10,7 @@ namespace lilypad {
         int nprow; // the number of process per row
         int npcol; // the number of process per column
         int N;     // global row dimension
+        int L;     // block size
     };
 
     // functions
