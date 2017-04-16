@@ -3,21 +3,21 @@
 
 #include <mpi.h>
 
+#include "lilypad/communicator.hpp"
+
 namespace lilypad {
     // TODO: make this Singleton
     class Global {
         private:
             int mpi_provided_;
-            int rank_;
-            int size_;
+            Communicator comm_;
         public:
             Global(int& argc, char**& argv)
             {
                 MPI_Init_thread(&argc, &argv, MPI_THREAD_MULTIPLE, &mpi_provided_);
-                MPI_Comm_rank(MPI_COMM_WORLD, &rank_);
-                MPI_Comm_size(MPI_COMM_WORLD, &size_);
+                comm_ = Communicator(MPI_COMM_WORLD);
                 if (mpi_provided_ == MPI_THREAD_SINGLE)
-                    if (rank_ == 0)
+                    if (comm_.rank() == 0)
                         std::cerr << "MPI_THREAD_SINGLE is provided; 1 thread per 1 process" << std::endl;
             }
             ~Global()
@@ -26,8 +26,8 @@ namespace lilypad {
             }
 
             int provided() const { return mpi_provided_; }
-            int rank() const { return rank_; }
-            int size() const { return size_; }
+            int rank() const { return comm_.rank(); }
+            int size() const { return comm_.size(); }
     };
 }
 

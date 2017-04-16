@@ -10,6 +10,7 @@ namespace lilypad {
             int rank_;
             int size_;
         public:
+            Communicator() {}
             explicit Communicator(MPI_Comm comm)
                 : comm_(comm)
             {
