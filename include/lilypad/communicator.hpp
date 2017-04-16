@@ -22,6 +22,7 @@ namespace lilypad {
             int rank() const { return rank_; }
             int size() const { return size_; }
             bool is_root() const { return rank_ == 0; }
+            MPI_Comm comm() const { return comm_; }
     };
 }
 
