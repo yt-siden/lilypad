@@ -8,6 +8,7 @@ set(lilypad_VERSION_MAJOR 0)
 set(lilypad_VERSION_MINOR 1)
 set(lilypad_VERSION_PATCH 0)
 set(lilypad_VERSION_TWEAK 0)
+set(LILYPAD_VERSION_STRING "${lilypad_VERSION_MAJOR}.${lilypad_VERSION_MINOR}.${lilypad_VERSION_PATCH}.${lilypad_VERSION_TWEAK}")
 
 # Check MPI
 find_package(MPI REQUIRED)
@@ -33,11 +34,11 @@ set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 include_directories(${CMAKE_SOURCE_DIR}/include)
 
 # information
-message(MESSAGE, "configuration info")
-message(MESSAGE, "CXX:       ${CMAKE_CXX_COMPILER}")
-message(MESSAGE, "CXXFLAGS:  ${CMAKE_CXX_FLAGS}")
-message(MESSAGE, "LDFLAGS:   ${CMAKE_EXE_LINKER_FLAGS}")
-message(MESSAGE, "LIBRARIES: ${ScaLAPACK_LIB};${MPI_CXX_LIBRARIES};${LAPACK_LIBRARIES}")
+message(STATUS "configuration info")
+message(STATUS "CXX:       ${CMAKE_CXX_COMPILER}")
+message(STATUS "CXXFLAGS:  ${CMAKE_CXX_FLAGS}")
+message(STATUS "LDFLAGS:   ${CMAKE_EXE_LINKER_FLAGS}")
+message(STATUS "LIBRARIES: ${ScaLAPACK_LIB};${MPI_CXX_LIBRARIES};${LAPACK_LIBRARIES}")
 
 # for Git information
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake/")
