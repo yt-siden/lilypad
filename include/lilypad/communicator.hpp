@@ -21,6 +21,7 @@ namespace lilypad {
             void barrier() const { MPI_Barrier(comm_); }
             int rank() const { return rank_; }
             int size() const { return size_; }
+            bool is_root() const { return rank_ == 0; }
     };
 }
 

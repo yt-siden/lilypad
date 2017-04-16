@@ -28,6 +28,7 @@ namespace lilypad {
             int provided() const { return mpi_provided_; }
             int rank() const { return comm_.rank(); }
             int size() const { return comm_.size(); }
+            bool is_root() const { return comm_.rank() == 0; }
     };
 }
 
