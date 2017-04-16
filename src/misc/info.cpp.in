@@ -1,0 +1,5 @@
+#include "lilypad/info.hpp"
+
+const char* lilypad::git_hash    = "@GIT_SHA1@";
+const char* lilypad::config_date = "@CONFIG_DATE@";
+const char* lilypad::version     = "@lilypad_VERSION@";
