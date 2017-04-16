@@ -53,6 +53,4 @@ configure_file("${CMAKE_SOURCE_DIR}/src/misc/info.cpp.in"
     "${CMAKE_BINARY_DIR}/src/misc/info.cpp" @ONLY)
 
 add_subdirectory(src)
-add_subdirectory(testing)
-add_subdirectory(example)
-
+add_subdirectory(bin)
