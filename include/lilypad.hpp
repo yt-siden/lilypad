@@ -5,5 +5,6 @@
 #include "lilypad/global.hpp"
 #include "lilypad/communicator.hpp"
 #include "lilypad/multivector.hpp"
+#include "lilypad/localmatrix.hpp"
 
 #endif // LILYPAD_HPP
