@@ -60,16 +60,13 @@ namespace lilypad {
         const std::complex<double> z_zero(0.0, 0.0), z_one(1.0, 0.0);
 
         // tmp <- Q*R
-        std::cout << "test1" << std::endl;
         MultiVector<T> tmp(A);
         wrapper::gemm('N', 'N', M, L, L, z_one, Q.ptr(), Q.ld(), R.ptr(), R.ld(),
                 z_zero, tmp.ptr(), tmp.ld());
 
         // tmp -= A
-        std::cout << "test2" << std::endl;
         tmp = tmp - A;
 
-        std::cout << "test3" << std::endl;
         double norm = tmp.F_norm();
         if (A.comm().is_root())
             std::cout << "||Q*R - A||_F = " << std::scientific << norm << std::endl;
