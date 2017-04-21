@@ -39,6 +39,7 @@ cd /somewhere/to/build
 module load gcc/4.8.5 openmpi/1.10.1_gcc intel/mkl/11.2.0
 
 CC=gcc CXX=g++ cmake /path/to/lilypad
+make
 ```
 
 # License
