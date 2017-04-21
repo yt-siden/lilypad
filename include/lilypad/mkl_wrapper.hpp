@@ -31,14 +31,12 @@ namespace lilypad {
         {
             int info;
             zpotrf(&uplo, &N, reinterpret_cast<MKL_Complex16*>(A.ptr()), &lda, &info);
-            std::cout << "potrf: " << info << std::endl;
         }
 
         void trtri(const char uplo, const char diag, const int N, LocalMatrix<cmplx_z>& A, const int lda)
         {
             int info;
             ztrtri(&uplo, &diag, &N, reinterpret_cast<MKL_Complex16*>(A.ptr()), &lda, &info);
-            std::cout << "trtri: " << info << std::endl;
         }
 
         double lange(const char norm, const int M, const int N, const LocalMatrix<cmplx_z>& A, const int lda, double* work)
