@@ -2,8 +2,11 @@
 #define LILYPAD_MULTIVECROR_HPP
 
 #include <vector>
+#include <cmath>
 #include "lilypad/communicator.hpp"
 #include "lilypad/localmatrix.hpp"
+#include "lilypad/mkl_wrapper.hpp"
+#include "lilypad/type_traits.hpp"
 
 namespace lilypad {
     template <typename T>
@@ -21,15 +24,38 @@ namespace lilypad {
             MultiVector(Communicator comm, int m, int n)
                 : comm_(comm), global_rows_(m), local_rows_(m / comm_.size()),
                   cols_(n), ld_(local_rows_), data_(local_rows_, cols_)
-            {
-            }
+            {}
 
-            T* ptr() const { return data_.ptr(); }
+            const T* ptr() const { return data_.ptr(); }
             T* ptr() { const_cast<T*>(static_cast<const MultiVector*>(this)->ptr()); }
             int global_rows() const { return global_rows_; }
             int local_rows() const { return local_rows_; }
             int cols() const { return cols_; }
             int ld() const { return ld_; }
+            Communicator comm() const { return comm_; }
+            void fill_random() {
+                // TODO: use C++11 random number generator
+                int iseed[] = { comm_.rank(), comm_.rank(), comm_.rank(), 1 };
+                wrapper::fill_random(4, iseed, ld_*cols_, data_);
+            }
+
+            double F_norm() const {
+                double tmp;
+                double ret = wrapper::lange('F', local_rows_, cols_, data_, ld_, &tmp);
+                ret *= ret;
+                comm_.Allreduce_sum(ret);
+                return sqrt(ret);
+            }
+
+            // for s,d,c,z
+            template <typename std::enable_if<is_blas_implemented_type<T>::value, std::nullptr_t>::type = nullptr>
+            MultiVector& operator-(const MultiVector& rhs)
+            {
+                // TODO: size check
+                data_ = data_ - rhs.data_;
+
+                return *this;
+            }
     };
 }
 

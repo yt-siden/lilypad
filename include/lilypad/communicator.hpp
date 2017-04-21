@@ -2,6 +2,10 @@
 #define LILYPAD_COMMUNICATOR_HPP
 
 #include <mpi.h>
+#include <complex>
+#include "lilypad/localmatrix.hpp"
+
+using cmplx_z = std::complex<double>;
 
 namespace lilypad {
     class Communicator {
@@ -23,6 +27,16 @@ namespace lilypad {
             int size() const { return size_; }
             bool is_root() const { return rank_ == 0; }
             MPI_Comm comm() const { return comm_; }
+
+            void Allreduce_sum(LocalMatrix<cmplx_z>& A)
+            {
+                MPI_Allreduce(MPI_IN_PLACE, A.ptr(), A.ld()*A.cols(), MPI_DOUBLE_COMPLEX, MPI_SUM, comm_);
+            }
+
+            void Allreduce_sum(double& a) const
+            {
+                MPI_Allreduce(MPI_IN_PLACE, &a, 1, MPI_DOUBLE, MPI_SUM, comm_);
+            }
     };
 }
 

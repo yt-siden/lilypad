@@ -2,6 +2,8 @@
 #define LILYPAD_LOCALMATRIX_HPP
 
 #include <vector>
+#include <algorithm>
+#include <lilypad/type_traits.hpp>
 
 namespace lilypad {
     template <typename T>
@@ -18,15 +20,34 @@ namespace lilypad {
                 data_.resize(ld_*cols_);
             }
             LocalMatrix(int rows, int cols)
-            {
-                LocalMatrix(rows, cols, rows);
-            }
+                : LocalMatrix(rows, cols, rows)
+            {}
 
             int rows() const { return rows_; }
             int cols() const { return cols_; }
             int ld() const { return ld_; }
-            T* ptr() const { return &data_[0]; }
+            int size() const { return data_.size(); }
+            const T* ptr() const { return &data_[0]; }
             T* ptr() { return const_cast<T*>( static_cast<const LocalMatrix*>(this)->ptr() ); }
+
+            void erase_lower_diag()
+            {
+                for (int i=0; i<cols_; ++i)
+                    for (int j=i+1; j<ld_; ++j)
+                        data_[i*ld_ + j] = 0.;
+            }
+
+            // for s,d,c,z
+            template <typename std::enable_if<is_blas_implemented_type<T>::value, std::nullptr_t>::type = nullptr>
+            LocalMatrix& operator-(const LocalMatrix& rhs)
+            {
+                // TODO: size check
+                for (int i=0; i<cols_; ++i)
+                for (int j=0; j<rows_; ++j)
+                    data_[i*ld_+j] -= rhs.data_[i*ld_+j];
+
+                return *this;
+            }
     };
 }
 
