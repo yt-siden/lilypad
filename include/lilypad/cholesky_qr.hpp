@@ -49,10 +49,9 @@ namespace lilypad {
         double t_chol = MPI_Wtime();
 
         // compute R^{-1}
-        wrapper::trtri('U', 'N', L, R, R.ld());
-        LocalMatrix<T> R_(R);
-        R_.erase_lower_diag();
         R.erase_lower_diag();
+        LocalMatrix<T> R_(R);
+        wrapper::trtri('U', 'N', L, R_, R_.ld());
         double t_inv = MPI_Wtime();
         if (Q.comm().is_root())
         {
