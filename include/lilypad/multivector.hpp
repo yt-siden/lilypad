@@ -1,6 +1,7 @@
 #ifndef LILYPAD_MULTIVECROR_HPP
 #define LILYPAD_MULTIVECROR_HPP
 
+#include <unistd.h>
 #include <vector>
 #include <cmath>
 #include "lilypad/communicator.hpp"
@@ -45,6 +46,20 @@ namespace lilypad {
                 ret *= ret;
                 comm_.Allreduce_sum(ret);
                 return sqrt(ret);
+            }
+
+            void dump()
+            {
+                for (int i=0; i<comm_.size(); ++i)
+                {
+                    if (i == comm_.rank())
+                    {
+                        std::cout << i << ':' << std::endl;
+                        data_.dump();
+                    }
+                    sleep(1);
+                    comm_.Barrier();
+                }
             }
 
             // for s,d,c,z

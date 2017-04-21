@@ -19,10 +19,24 @@ int main(int argc, char* argv[])
     lilypad::MultiVector<cmplx> A(global.comm(), arg.N, arg.L);
     A.fill_random();
 
+    if (global.is_root())
+        std::cout << "A" << std::endl;
+    A.dump();
+
     lilypad::MultiVector<cmplx> Q(A);
     lilypad::LocalMatrix<cmplx> R(arg.L, arg.L);
-
     lilypad::cholesky_QR(A, Q, R);
+
+    if (global.is_root())
+        std::cout << "Q" << std::endl;
+    Q.dump();
+
+    if (global.is_root())
+    {
+        std::cout << "R" << std::endl;
+        R.dump();
+    }
+
     lilypad::check_cholesky_QR(A, Q, R);
     std::cout << "end" << std::endl;
 }

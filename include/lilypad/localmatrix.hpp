@@ -3,6 +3,7 @@
 
 #include <vector>
 #include <algorithm>
+#include <iostream>
 #include <lilypad/type_traits.hpp>
 
 namespace lilypad {
@@ -35,6 +36,17 @@ namespace lilypad {
                 for (int i=0; i<cols_; ++i)
                     for (int j=i+1; j<ld_; ++j)
                         data_[i*ld_ + j] = 0.;
+            }
+
+            void dump() const
+            {
+                for (int i=0; i<rows_; ++i)
+                {
+                    for (int j=0; j<cols_; ++j)
+                        std::cout << data_[j*ld_+i] << ' ';
+                    std::cout << std::endl;
+                }
+                std::cout << std::endl;
             }
 
             // for s,d,c,z

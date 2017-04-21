@@ -29,10 +29,20 @@ namespace lilypad {
         wrapper::gemm('C', 'N', L, L, M, z_one, A.ptr(), A.ld(), Q.ptr(), Q.ld(),
                 z_zero, R.ptr(), R.ld());
         double t_gemm = MPI_Wtime();
+        if (Q.comm().is_root())
+        {
+            std::cout << "R(after GEMM)" << std::endl;
+            R.dump();
+        }
 
         // Allreduce R
         Q.comm().Allreduce_sum(R);
         double t_reduce = MPI_Wtime();
+        if (Q.comm().is_root())
+        {
+            std::cout << "R(after Reduce)" << std::endl;
+            R.dump();
+        }
 
         // cholesky factorization of R
         wrapper::potrf('U', L, R, R.ld());
@@ -44,6 +54,13 @@ namespace lilypad {
         R_.erase_lower_diag();
         R.erase_lower_diag();
         double t_inv = MPI_Wtime();
+        if (Q.comm().is_root())
+        {
+            std::cout << "R(calculated)" << std::endl;
+            R.dump();
+            std::cout << "R^-1(calculated)" << std::endl;
+            R_.dump();
+        }
 
         // Q = A*R^{-1}
         wrapper::gemm('N', 'N', M, L, L, z_one, A.ptr(), A.ld(), R_.ptr(), R_.ld(),

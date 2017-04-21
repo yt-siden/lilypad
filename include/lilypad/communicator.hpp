@@ -37,6 +37,11 @@ namespace lilypad {
             {
                 MPI_Allreduce(MPI_IN_PLACE, &a, 1, MPI_DOUBLE, MPI_SUM, comm_);
             }
+
+            void Barrier() const
+            {
+                MPI_Barrier(comm_);
+            }
     };
 }
 
