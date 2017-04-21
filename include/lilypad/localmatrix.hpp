@@ -49,6 +49,20 @@ namespace lilypad {
                 std::cout << std::endl;
             }
 
+            void set_Zeros()
+            {
+                for (int i=0; i<cols_; ++i)
+                for (int j=0; j<rows_; ++j)
+                    data_[i*ld_+j] = 0.;
+            }
+
+            void set_Eye()
+            {
+                set_Zeros();
+                for (int i=0; i<std::min(rows_, cols_); ++i)
+                    data_[i*ld_+i] = 1.;
+            }
+
             // for s,d,c,z
             template <typename std::enable_if<is_blas_implemented_type<T>::value, std::nullptr_t>::type = nullptr>
             LocalMatrix& operator-(const LocalMatrix& rhs)

@@ -70,6 +70,22 @@ namespace lilypad {
         double norm = tmp.F_norm();
         if (A.comm().is_root())
             std::cout << "||Q*R - A||_F = " << std::scientific << norm << std::endl;
+
+        // Orthogonality of Q
+        MultiVector<T> Q_(Q);
+        LocalMatrix<T> QQ(L, L), I(L, L);
+        I.set_Eye();
+
+        // QQ <- Q'*Q
+        wrapper::gemm('C', 'N', L, L, M, z_one, Q_.ptr(), Q_.ld(), Q.ptr(), Q.ld(),
+                z_zero, QQ.ptr(), QQ.ld());
+        Q.comm().Allreduce_sum(QQ);
+
+        QQ = QQ - I;
+        double d_work;
+        double norm_QQ = wrapper::lange('F', QQ.rows(), QQ.cols(), QQ, QQ.ld(), &d_work);
+        if (A.comm().is_root())
+            std::cout << "||Q^H*Q - I||_F = " << std::scientific << norm_QQ << std::endl;
     }
 }
 
