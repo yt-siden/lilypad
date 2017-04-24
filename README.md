@@ -4,6 +4,7 @@ Currently, basic linear algebra operation and cholesky QR for double precision c
 
 # Requirements
 
+- CMake (for build)
 - C++ compiler which supports C++11 (e.g. GCC 4.8.5 or later)
 - Intel MKL (other BLAS/LAPACK support is progress)
 - MPI Environment (e.g. OpenMPI, mpich)
@@ -11,6 +12,7 @@ Currently, basic linear algebra operation and cholesky QR for double precision c
 Development Environment is following:
 
 - OS: CentOS 6.9
+- CMake 3.4.3
 - GCC 4.8.5
 - Intel MKL 11.2.0
 - OpenMPI 1.10.1
@@ -28,7 +30,7 @@ gtt submodule update
 
 3. configure and build using CMake
 
-Note that out-of-tree build is **strictly recommended**.
+Note that out-of-tree build is **strongly recommended**.
 
 Example:
 
