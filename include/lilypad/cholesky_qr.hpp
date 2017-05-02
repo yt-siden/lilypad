@@ -49,44 +49,6 @@ namespace lilypad {
                 z_zero, Q.ptr(), Q.ld());
         double t_smgemm = MPI_Wtime();
     }
-
-    // check
-    template <typename T>
-    void check_cholesky_QR(const MultiVector<T>& A, const MultiVector<T>& Q, const LocalMatrix<T>& R)
-    {
-        // TODO: input check
-        int M = A.local_rows();
-        int L = R.rows();
-        const std::complex<double> z_zero(0.0, 0.0), z_one(1.0, 0.0);
-
-        // tmp <- Q*R
-        MultiVector<T> tmp(A);
-        wrapper::gemm('N', 'N', M, L, L, z_one, Q.ptr(), Q.ld(), R.ptr(), R.ld(),
-                z_zero, tmp.ptr(), tmp.ld());
-
-        // tmp -= A
-        tmp = tmp - A;
-
-        double norm = tmp.F_norm();
-        if (A.comm().is_root())
-            std::cout << "||Q*R - A||_F = " << std::scientific << norm << std::endl;
-
-        // Orthogonality of Q
-        MultiVector<T> Q_(Q);
-        LocalMatrix<T> QQ(L, L), I(L, L);
-        I.set_Eye();
-
-        // QQ <- Q'*Q
-        wrapper::gemm('C', 'N', L, L, M, z_one, Q_.ptr(), Q_.ld(), Q.ptr(), Q.ld(),
-                z_zero, QQ.ptr(), QQ.ld());
-        Q.comm().Allreduce_sum(QQ);
-
-        QQ = QQ - I;
-        double d_work;
-        double norm_QQ = wrapper::lange('F', QQ.rows(), QQ.cols(), QQ, QQ.ld(), &d_work);
-        if (A.comm().is_root())
-            std::cout << "||Q^H*Q - I||_F = " << std::scientific << norm_QQ << std::endl;
-    }
 }
 
 #endif // LILYPAD_CHOLESKY_QR_HPP
