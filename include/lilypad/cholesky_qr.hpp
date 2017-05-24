@@ -26,7 +26,7 @@ namespace lilypad {
         double t_copy = MPI_Wtime();
 
         // local GEMM to R
-        wrapper::gemm('C', 'N', L, L, M, z_one, A.ptr(), A.ld(), Q.ptr(), Q.ld(),
+        wrapper::blas::gemm('C', 'N', L, L, M, z_one, A.ptr(), A.ld(), Q.ptr(), Q.ld(),
                 z_zero, R.ptr(), R.ld());
         double t_gemm = MPI_Wtime();
 
@@ -35,17 +35,17 @@ namespace lilypad {
         double t_reduce = MPI_Wtime();
 
         // cholesky factorization of R
-        wrapper::potrf('U', L, R, R.ld());
+        wrapper::lapack::potrf('U', L, R, R.ld());
         double t_chol = MPI_Wtime();
 
         // compute R^{-1}
         R.erase_lower_diag();
         LocalMatrix<T> R_(R);
-        wrapper::trtri('U', 'N', L, R_, R_.ld());
+        wrapper::lapack::trtri('U', 'N', L, R_, R_.ld());
         double t_inv = MPI_Wtime();
 
         // Q = A*R^{-1}
-        wrapper::gemm('N', 'N', M, L, L, z_one, A.ptr(), A.ld(), R_.ptr(), R_.ld(),
+        wrapper::blas::gemm('N', 'N', M, L, L, z_one, A.ptr(), A.ld(), R_.ptr(), R_.ld(),
                 z_zero, Q.ptr(), Q.ld());
         double t_smgemm = MPI_Wtime();
     }

@@ -31,7 +31,7 @@ int main(int argc, char* argv[])
 
     // tmp <- Q*R
     lilypad::MultiVector<cmplx> tmp(A);
-    lilypad::wrapper::gemm('N', 'N', M, L, L, z_one, Q.ptr(), Q.ld(), R.ptr(), R.ld(),
+    lilypad::wrapper::blas::gemm('N', 'N', M, L, L, z_one, Q.ptr(), Q.ld(), R.ptr(), R.ld(),
             z_zero, tmp.ptr(), tmp.ld());
 
     // tmp -= A
@@ -47,13 +47,13 @@ int main(int argc, char* argv[])
     I.set_Eye();
 
     // QQ <- Q'*Q
-    lilypad::wrapper::gemm('C', 'N', L, L, M, z_one, Q_.ptr(), Q_.ld(), Q.ptr(), Q.ld(),
+    lilypad::wrapper::blas::gemm('C', 'N', L, L, M, z_one, Q_.ptr(), Q_.ld(), Q.ptr(), Q.ld(),
             z_zero, QQ.ptr(), QQ.ld());
     Q.comm().Allreduce_sum(QQ);
 
     QQ = QQ - I;
     double d_work;
-    double norm_QQ = lilypad::wrapper::lange('F', QQ.rows(), QQ.cols(), QQ, QQ.ld(), &d_work);
+    double norm_QQ = lilypad::wrapper::lapack::lange('F', QQ.rows(), QQ.cols(), QQ, QQ.ld(), &d_work);
     if (A.comm().is_root())
         std::cout << "||Q^H*Q - I||_F = " << std::scientific << norm_QQ << std::endl;
 }

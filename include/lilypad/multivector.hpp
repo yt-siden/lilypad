@@ -37,12 +37,12 @@ namespace lilypad {
             void fill_random() {
                 // TODO: use C++11 random number generator
                 int iseed[] = { comm_.rank(), comm_.rank(), comm_.rank(), 1 };
-                wrapper::fill_random(4, iseed, ld_*cols_, data_);
+                wrapper::lapack::larnv(4, iseed, ld_*cols_, data_);
             }
 
             double F_norm() const {
                 double tmp;
-                double ret = wrapper::lange('F', local_rows_, cols_, data_, ld_, &tmp);
+                double ret = wrapper::lapack::lange('F', local_rows_, cols_, data_, ld_, &tmp);
                 ret *= ret;
                 comm_.Allreduce_sum(ret);
                 return sqrt(ret);
